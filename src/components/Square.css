@@ -1,0 +1,12 @@
+div.square {
+    height:50px;
+    width:50px;
+    float:left;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+div.square.black {
+    background-color: gray;
+}

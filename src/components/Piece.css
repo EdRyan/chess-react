@@ -1,0 +1,4 @@
+div.piece.white path {
+    stroke: black;
+    stroke-width: 10;
+}
