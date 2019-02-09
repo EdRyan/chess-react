@@ -1,4 +1,4 @@
-import { UPDATE_BOARD } from './types';
+import {UPDATE_BOARD, NEXT_TURN} from './types';
 
 const getPiece = (type, color) => { return {type, color}; }
 
@@ -39,5 +39,11 @@ export const initializeChessboard = () => {
             g8: getPiece('knight','black'),
             h8: getPiece('rook','black')
         }
+    }
+};
+
+export const nextTurn = () => {
+    return {
+        type: NEXT_TURN
     }
 };

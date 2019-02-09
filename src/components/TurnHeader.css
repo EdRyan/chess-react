@@ -1,0 +1,65 @@
+div.turn-header {
+    width: 400px;
+    height: 60px;
+    border: 1px solid gray;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    display: flex;
+    text-align: center;
+}
+
+div.turn-header div.turn {
+    float: left;
+    width: 125px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+div.turn-header div.number {
+    float: left;
+    width: 75px;
+    font-size: 3em;
+    background-color: gray;
+    font-weight: bold;
+}
+
+div.turn-header div.player {
+    float: left;
+    width:125px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+div.turn-header div.name {
+    float: left;
+    width: 75px;
+}
+
+div.turn-header div.icon {
+    width: 75px;
+    background-color: gray;
+    height: 100%;
+    text-align: center;
+    padding: 0;
+}
+
+
+div.turn-header div.icon svg {
+    margin-top: 6px;
+}
+
+div.turn-header div.icon p {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 2px auto 0 auto;
+}
+
+div.turn-header div.icon p.white {
+    color: white;
+}
+
+div.turn-header h3 {
+    margin: 0;
+}
