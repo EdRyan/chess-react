@@ -9,7 +9,9 @@ import './Chessboard.css';
 class Chessboard extends React.Component {
 
     componentDidMount() {
-        this.props.initializeChessboard();
+        if (this.props.turnNumber === 1) {
+            this.props.initializeChessboard();
+        }
     }
 
     isPieceSelectable = function(piece) {
@@ -85,6 +87,7 @@ const mapStateToProps = state => {
     return {
         board: state.board,
         player: state.turn.player,
+        turnNumber: state.turn.number,
         selectedPiece: state.selectedPiece
     };
 };
