@@ -1,4 +1,6 @@
-import {UPDATE_BOARD, NEXT_TURN} from './types';
+import {UPDATE_BOARD, NEXT_TURN, SELECT_PIECE} from './types';
+import {squareNameToArrayIndices, arrayIndicesToSquareName} from "../helpers";
+import MoveBuilder from "../MoveBuilder";
 
 const getPiece = (type, color) => { return {type, color}; }
 
@@ -40,6 +42,38 @@ export const initializeChessboard = () => {
             h8: getPiece('rook','black')
         }
     }
+};
+
+export const selectPiece = (squareName, piece, board) => {
+
+    const [x,y] = squareNameToArrayIndices(squareName);
+
+    if (!piece) {
+        return {
+            type: SELECT_PIECE,
+            payload: {
+                squareName: squareName,
+                allowedMoves: []
+            }
+        };
+    }
+
+    const allowedMoves = new MoveBuilder()
+        .forPieceType(piece.type)
+        .ofColor(piece.color)
+        .atPosition(x,y)
+        .onBoard(board)
+        .getAllowedMoves();
+
+    const allowedMoveNames = allowedMoves.map(([a,b]) => arrayIndicesToSquareName([a,b]));
+
+    return {
+        type: SELECT_PIECE,
+        payload: {
+            squareName: squareName,
+            allowedMoves: allowedMoveNames
+        }
+    };
 };
 
 export const nextTurn = () => {

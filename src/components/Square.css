@@ -7,6 +7,23 @@ div.square {
     display: flex;
 }
 
+div.square.selectable {
+    cursor: pointer;
+}
+
 div.square.black {
     background-color: gray;
+}
+
+div.square.selected path {
+    stroke: #3a3;
+    stroke-width: 20;
+}
+
+div.square.allowed {
+    background-color: #9f9;
+}
+
+div.square.allowed.black {
+    background-color: #3a3;
 }
