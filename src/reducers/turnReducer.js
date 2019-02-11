@@ -11,7 +11,7 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 number: state.number + 1,
-                player: state.player == 'white' ? 'black' : 'white'
+                player: state.player === 'white' ? 'black' : 'white'
             };
         default:
             return state;
