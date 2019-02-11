@@ -21,7 +21,7 @@ class Square extends React.Component {
         return (
             <div
                 onClick={this.props.onClick}
-                className={`square ${this.props.color} ${this.props.selectable ? 'selectable' : ''} ${this.props.selected ? 'selected' : ''} ${this.props.allowedMove ? 'allowed' : ''}`}
+                className={`square ${this.props.color} ${this.props.selectable ? 'selectable' : ''} ${this.props.selected ? 'selected' : ''} ${this.props.allowedMove ? 'allowed selectable' : ''}`}
             >
                 {this.renderPiece()}
             </div>

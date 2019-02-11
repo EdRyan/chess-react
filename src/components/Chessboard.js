@@ -22,14 +22,23 @@ class Chessboard extends React.Component {
         }
 
         const [x,y] = squareNameToArrayIndices(squareName);
-        const piece = this.props.board[x][y];
+        const newlySelectedPiece = this.props.board[x][y];
 
-        if (!this.isPieceSelectable(piece) || squareName === this.props.selectedPiece.squareName) {
+        const {squareName: currentSquare, allowedMoves} = this.props.selectedPiece;
+
+        if (allowedMoves.includes(squareName)) {
+            const [curX,curY] = squareNameToArrayIndices(currentSquare);
+            const currentPiece = this.props.board[curX][curY];
+            this.props.playTurn(currentSquare, squareName, currentPiece);
+            return;
+        }
+
+        if (!this.isPieceSelectable(newlySelectedPiece) || squareName === currentSquare) {
             this.props.selectPiece('', null, this.props.board);
             return;
         }
 
-        this.props.selectPiece(squareName, piece, this.props.board);
+        this.props.selectPiece(squareName, newlySelectedPiece, this.props.board);
     };
 
     renderBoard() {

@@ -1,3 +1,3 @@
-export const UPDATE_BOARD = 'UPDATE_BOARD';
+export const INITIALIZE_BOARD = 'INITIALIZE_BOARD';
 export const SELECT_PIECE = 'SELECT_PIECE';
-export const NEXT_TURN = 'NEXT_TURN';
+export const PLAY_TURN = 'PLAY_TURN';

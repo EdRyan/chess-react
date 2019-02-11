@@ -1,4 +1,4 @@
-import { NEXT_TURN } from '../actions/types';
+import { PLAY_TURN } from '../actions/types';
 
 const INITIAL_STATE = {
     number: 1,
@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case NEXT_TURN:
+        case PLAY_TURN:
             return {
                 ...state,
                 number: state.number + 1,

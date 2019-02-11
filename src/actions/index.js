@@ -1,4 +1,4 @@
-import {UPDATE_BOARD, NEXT_TURN, SELECT_PIECE} from './types';
+import {INITIALIZE_BOARD, PLAY_TURN, SELECT_PIECE} from './types';
 import {squareNameToArrayIndices, arrayIndicesToSquareName} from "../helpers";
 import MoveBuilder from "../MoveBuilder";
 
@@ -6,7 +6,7 @@ const getPiece = (type, color) => { return {type, color}; }
 
 export const initializeChessboard = () => {
     return {
-        type: UPDATE_BOARD,
+        type: INITIALIZE_BOARD,
         payload: {
             a1: getPiece('rook','white'),
             b1: getPiece('knight','white'),
@@ -76,8 +76,18 @@ export const selectPiece = (squareName, piece, board) => {
     };
 };
 
-export const nextTurn = () => {
+export const playTurn = (srcSquareName, destSquareName, piece, swapPiece=null) => {
     return {
-        type: NEXT_TURN
-    }
+        type: PLAY_TURN,
+        payload: {
+            source: {
+                squareName: srcSquareName,
+                newPiece: swapPiece
+            },
+            destination: {
+                squareName: destSquareName,
+                newPiece: piece
+            }
+        }
+    };
 };
