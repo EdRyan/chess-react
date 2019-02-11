@@ -34,6 +34,8 @@ class MoveBuilder {
                 return this._getAllowedRookMoves();
             case 'bishop':
                 return this._getAllowedBishopMoves();
+            case 'queen':
+                return this._getAllowedQueenMoves();
             default:
                 return [];
         }
@@ -85,6 +87,15 @@ class MoveBuilder {
     _getAllowedRookMoves() {
         const moves = [];
 
+        const lateralMoves = this._getLateralMoves();
+        moves.push(...lateralMoves);
+
+        return moves;
+    }
+
+    _getLateralMoves() {
+        const moves = [];
+
         const up = [...Array(7).keys()]
             .map(key => [0,key + 1]);
         const upMoves = this._computeMovesUntilBlocked(up, (indices) => {
@@ -119,6 +130,15 @@ class MoveBuilder {
     _getAllowedBishopMoves() {
         const moves = [];
 
+        const diagonalMoves = this._getDiagonalMoves();
+        moves.push(...diagonalMoves);
+
+        return moves;
+    }
+
+    _getDiagonalMoves() {
+        const moves = [];
+
         const upRight = [...Array(7).keys()]
             .map(key => [key + 1,key + 1]);
         const upRightMoves = this._computeMovesUntilBlocked(upRight, (indices) => {
@@ -148,6 +168,10 @@ class MoveBuilder {
         moves.push(...downLeftMoves);
 
         return moves;
+    }
+
+    _getAllowedQueenMoves() {
+        return this._getLateralMoves().concat(this._getDiagonalMoves());
     }
 
     _computeMovesUntilBlocked(array, includeBlockedSquareCallback=undefined) {
