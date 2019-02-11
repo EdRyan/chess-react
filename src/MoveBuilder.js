@@ -36,6 +36,8 @@ class MoveBuilder {
                 return this._getAllowedBishopMoves();
             case 'queen':
                 return this._getAllowedQueenMoves();
+            case 'king':
+                return this._getAllowedKingMoves();
             default:
                 return [];
         }
@@ -172,6 +174,30 @@ class MoveBuilder {
 
     _getAllowedQueenMoves() {
         return this._getLateralMoves().concat(this._getDiagonalMoves());
+    }
+
+    _getAllowedKingMoves() {
+        const moves = [];
+
+        const possibleMoves = [
+            [0,1],
+            [1,1],
+            [1,0],
+            [0,-1],
+            [1,-1],
+            [-1,0],
+            [-1,1],
+            [-1,-1]
+        ];
+
+        const newMoves = possibleMoves
+            .map(o => this._convertOffsetToIndices(o))
+            .filter(indices => this._isInBounds(indices) &&
+                !this._isOccupiedByFriend(indices));
+
+        moves.push(...newMoves);
+
+        return moves;
     }
 
     _computeMovesUntilBlocked(array, includeBlockedSquareCallback=undefined) {
