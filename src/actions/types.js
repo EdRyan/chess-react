@@ -1,3 +1,4 @@
 export const INITIALIZE_BOARD = 'INITIALIZE_BOARD';
 export const SELECT_PIECE = 'SELECT_PIECE';
 export const PLAY_TURN = 'PLAY_TURN';
+export const RESTART_GAME = 'RESTART_GAME';

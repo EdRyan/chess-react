@@ -1,4 +1,4 @@
-import { SELECT_PIECE, PLAY_TURN } from '../actions/types';
+import { SELECT_PIECE, PLAY_TURN, RESTART_GAME } from '../actions/types';
 
 const INITIAL_STATE = {
     squareName: '',
@@ -19,6 +19,8 @@ export default (state = INITIAL_STATE, action) => {
                 squareName: '',
                 allowedMoves: []
             };
+        case RESTART_GAME:
+            return {...INITIAL_STATE};
         default:
             return state;
     }
