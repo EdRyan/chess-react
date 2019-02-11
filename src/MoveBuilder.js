@@ -28,6 +28,8 @@ class MoveBuilder {
         switch (this.pieceType) {
             case 'pawn':
                 return this._getAllowedPawnMoves();
+            case 'knight':
+                return this._getAllowedKnightMoves();
             default:
                 return [];
         }
@@ -61,6 +63,21 @@ class MoveBuilder {
         return moves;
     };
 
+    _getAllowedKnightMoves() {
+        const moves = [];
+
+        const jumps = [ [1,2],[-1,2],[2,1],[-2,1],[1,-2],[-1,-2],[2,-1],[-2,-1] ];
+
+        const newMoves = jumps
+            .map(o => this._convertOffsetToIndices(o))
+            .filter(indices => this._isInBounds(indices) &&
+                !this._isOccupiedByFriend(indices));
+
+        moves.push(...newMoves);
+
+        return moves;
+    }
+
     _computeMovesUntilBlocked(array) {
         const moves = [];
 
@@ -83,6 +100,11 @@ class MoveBuilder {
     _isOccupiedByEnemy([x,y]) {
         const piece = this.board[x][y];
         return piece && piece.color !== this.color;
+    }
+
+    _isOccupiedByFriend([x,y]) {
+        const piece = this.board[x][y];
+        return piece && piece.color === this.color;
     }
 
     _convertOffsetToIndices([deltaX, deltaY]) {
