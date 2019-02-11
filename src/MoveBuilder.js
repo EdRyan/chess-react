@@ -30,6 +30,8 @@ class MoveBuilder {
                 return this._getAllowedPawnMoves();
             case 'knight':
                 return this._getAllowedKnightMoves();
+            case 'rook':
+                return this._getAllowedRookMoves();
             default:
                 return [];
         }
@@ -44,7 +46,7 @@ class MoveBuilder {
             forwardMoves.push([0,2]);
         }
 
-        const newMoves = this._computeMovesUntilBlocked(forwardMoves);
+        const newMoves = this._computeMovesUntilBlocked(forwardMoves, false);
 
         moves.push(...newMoves);
 
@@ -78,15 +80,61 @@ class MoveBuilder {
         return moves;
     }
 
-    _computeMovesUntilBlocked(array) {
+    _getAllowedRookMoves() {
+        const moves = [];
+
+        const up = [...Array(7).keys()]
+            .map(key => [0,key + 1]);
+        const upMoves = this._computeMovesUntilBlocked(up, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...upMoves);
+
+        const down = [...Array(7).keys()]
+            .map(key => [0,-key - 1]);
+        const downMoves = this._computeMovesUntilBlocked(down, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...downMoves);
+
+        const right = [...Array(7).keys()]
+            .map(key => [key + 1,0]);
+        const rightMoves = this._computeMovesUntilBlocked(right, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...rightMoves);
+
+        const left = [...Array(7).keys()]
+            .map(key => [-key - 1,0]);
+        const leftMoves = this._computeMovesUntilBlocked(left, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...leftMoves);
+
+        return moves;
+    }
+
+    _computeMovesUntilBlocked(array, includeBlockedSquareCallback=undefined) {
         const moves = [];
 
         for (let i = 0; i < array.length; i++) {
             const indices = this._convertOffsetToIndices(array[i]);
-            if (this._isOccupied(indices) || !this._isInBounds(indices)) {
+
+            const inBounds = this._isInBounds(indices);
+
+            if (!inBounds || this._isOccupied(indices)) {
+
+                if (inBounds && includeBlockedSquareCallback && includeBlockedSquareCallback(indices))
+                {
+                    moves.push(indices);
+                }
+
                 break;
+
             } else {
+
                 moves.push(indices);
+
             }
         }
 
