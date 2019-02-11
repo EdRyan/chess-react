@@ -32,6 +32,8 @@ class MoveBuilder {
                 return this._getAllowedKnightMoves();
             case 'rook':
                 return this._getAllowedRookMoves();
+            case 'bishop':
+                return this._getAllowedBishopMoves();
             default:
                 return [];
         }
@@ -110,6 +112,40 @@ class MoveBuilder {
             return this._isOccupiedByEnemy(indices);
         });
         moves.push(...leftMoves);
+
+        return moves;
+    }
+
+    _getAllowedBishopMoves() {
+        const moves = [];
+
+        const upRight = [...Array(7).keys()]
+            .map(key => [key + 1,key + 1]);
+        const upRightMoves = this._computeMovesUntilBlocked(upRight, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...upRightMoves);
+
+        const downRight = [...Array(7).keys()]
+            .map(key => [key + 1,-key - 1]);
+        const downRightMoves = this._computeMovesUntilBlocked(downRight, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...downRightMoves);
+
+        const upLeft = [...Array(7).keys()]
+            .map(key => [-key - 1,key + 1]);
+        const upLeftMoves = this._computeMovesUntilBlocked(upLeft, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...upLeftMoves);
+
+        const downLeft = [...Array(7).keys()]
+            .map(key => [-key - 1,-key - 1]);
+        const downLeftMoves = this._computeMovesUntilBlocked(downLeft, (indices) => {
+            return this._isOccupiedByEnemy(indices);
+        });
+        moves.push(...downLeftMoves);
 
         return moves;
     }
