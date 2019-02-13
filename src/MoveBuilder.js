@@ -197,6 +197,8 @@ class MoveBuilder {
 
         moves.push(...newMoves);
 
+        // TODO filter out squares under attack (would put king in check)
+
         return moves;
     }
 
