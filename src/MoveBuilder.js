@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 class MoveBuilder {
 
     forPieceType(pieceType) {
@@ -21,9 +23,22 @@ class MoveBuilder {
         return this;
     }
 
-    getAllowedMoves() {
+    getAllowedMoves(removeUnderAttackSquares=undefined) {
 
         // TODO check required setup has been made
+
+        const remove = removeUnderAttackSquares === undefined ? (this.pieceType === 'king' ? true : false) : removeUnderAttackSquares;
+
+        const moves = this._getAllowedMoves(remove);
+
+        if (remove) {
+            return this._removeUnderAttackSquares(moves);
+        }
+
+        return moves;
+    }
+
+    _getAllowedMoves(removeUnderAttackSquares) {
 
         switch (this.pieceType) {
             case 'pawn':
@@ -41,6 +56,16 @@ class MoveBuilder {
             default:
                 return [];
         }
+    }
+
+     _removeUnderAttackSquares(moves) {
+        const attackingColor = this.color === 'white' ? 'black' : 'white';
+        return moves.filter(([x, y]) => {
+            const newBoard = _.cloneDeep(this.board);
+            newBoard[x][y] = newBoard[this.x][this.y];
+            newBoard[this.x][this.y] = null;
+            return !this._isUnderAttack(x, y, attackingColor, newBoard);
+        });
     }
 
     _getAllowedPawnMoves() {
@@ -197,9 +222,31 @@ class MoveBuilder {
 
         moves.push(...newMoves);
 
-        // TODO filter out squares under attack (would put king in check)
-
         return moves;
+    }
+
+    _isUnderAttack(x,y, attackingColor, boardOverride=null) {
+
+        const board = boardOverride || this.board;
+
+        return [...Array(8).keys()].some(row => {
+            const otherY = 7-row;
+            return [...Array(8).keys()].some(otherX => {
+                const piece = board[otherX][otherY];
+
+                if (!piece || piece.color !== attackingColor) {
+                    return false;
+                }
+
+                return new MoveBuilder()
+                    .forPieceType(piece.type)
+                    .ofColor(piece.color)
+                    .atPosition(otherX,otherY)
+                    .onBoard(board)
+                    .getAllowedMoves(false)
+                    .some(([a,b]) => a === x && b === y);
+            })
+        })
     }
 
     _computeMovesUntilBlocked(array, includeBlockedSquareCallback=undefined) {
