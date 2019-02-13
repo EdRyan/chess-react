@@ -19,6 +19,7 @@ export const getAllowedMoves = (board, currentSquareName) => {
         .ofColor(piece.color)
         .atPosition(x,y)
         .onBoard(board)
+        .havingMoved(piece.hasMoved)
         .getAllowedMoves();
 
     return allowedMoves.map(([a,b]) => arrayIndicesToSquareName([a,b]));

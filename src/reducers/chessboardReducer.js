@@ -32,12 +32,26 @@ export default (state = INITIAL_STATE, action) => {
         case PLAY_TURN:
             const newBoardState = [...state];
 
+            // clear old piece position
             const [srcX,srcY] = squareNameToArrayIndices(action.payload.source.squareName);
-            const {newPiece} = action.payload.source;
-            newBoardState[srcX][srcY] = newPiece? {...newPiece} : null;
+            newBoardState[srcX][srcY] = null;
 
             const [destX,destY] = squareNameToArrayIndices(action.payload.destination.squareName);
-            newBoardState[destX][destY] = {...action.payload.destination.newPiece};
+
+            const piece = action.payload.destination.newPiece;
+            if (piece.type === 'king' && !piece.hasMoved && (destX === 0 || destX === 7)) {
+                // we are castling
+                const newKingX = destX === 0 ? 2 : 6;
+                const newRookX = destX === 0 ? 3 : 5;
+
+                // set new king position
+                newBoardState[newKingX][destY] = {...action.payload.destination.newPiece, hasMoved: true};
+                // set new rook position
+                newBoardState[newRookX][destY] = {...state[destX][destY], hasMoved: true}
+                newBoardState[destX][destY] = null;
+            } else {
+                newBoardState[destX][destY] = {...action.payload.destination.newPiece, hasMoved: true};
+            }
 
             return newBoardState;
         default:

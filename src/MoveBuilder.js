@@ -23,6 +23,11 @@ class MoveBuilder {
         return this;
     }
 
+    havingMoved(hasMoved) {
+        this.hasMoved = hasMoved;
+        return this;
+    }
+
     getAllowedMoves(removeUnderAttackSquares=undefined) {
 
         // TODO check required setup has been made
@@ -61,9 +66,7 @@ class MoveBuilder {
      _removeUnderAttackSquares(moves) {
         const attackingColor = this.color === 'white' ? 'black' : 'white';
         return moves.filter(([x, y]) => {
-            const newBoard = _.cloneDeep(this.board);
-            newBoard[x][y] = newBoard[this.x][this.y];
-            newBoard[this.x][this.y] = null;
+            const newBoard = this._getNewBoard(x,y);
             return !this._isUnderAttack(x, y, attackingColor, newBoard);
         });
     }
@@ -222,7 +225,71 @@ class MoveBuilder {
 
         moves.push(...newMoves);
 
+        // castling
+        if (!this.hasMoved) {
+            const attackingPlayer = this.color === 'white' ? 'black' : 'white';
+
+            // check left rook
+            const leftRook = this.board[0][this.y];
+            if (leftRook && !leftRook.hasMoved)
+            {
+                if (this._rowIsOpen(1,this.x-1,this.y)) {
+                    let underAttack = false;
+                    for (let i=0; i <= 2; i++) {
+                        const newBoard = this._getNewBoard(this.x-i,this.y);
+                        underAttack = underAttack || this._isUnderAttack(this.x-i,this.y,attackingPlayer,newBoard);
+                        if (underAttack) {
+                            break;
+                        }
+                    }
+
+                    if (!underAttack) {
+                        moves.push([0,this.y]);
+                    }
+                }
+            }
+
+            // check right rook
+            const rightRook = this.board[7][this.y];
+            if (rightRook && !rightRook.hasMoved)
+            {
+                if (this._rowIsOpen(this.x+1,6,this.y)) {
+                    let underAttack = false;
+                    for (let i=0; i <= 2; i++) {
+                        const newBoard = this._getNewBoard(this.x+i,this.y);
+                        underAttack = underAttack || this._isUnderAttack(this.x+i,this.y,attackingPlayer,newBoard);
+                        if (underAttack) {
+                            break;
+                        }
+                    }
+
+                    if (!underAttack) {
+                        moves.push([7,this.y]);
+                    }
+                }
+            }
+        }
+
         return moves;
+    }
+
+    _getNewBoard(newX, newY) {
+        const newBoard = _.cloneDeep(this.board);
+        newBoard[newX][newY] = newBoard[this.x][this.y];
+        newBoard[newX][newY].hasMoved = true;
+        newBoard[this.x][this.y] = null;
+        return newBoard;
+    }
+
+    _rowIsOpen(startX,endX,y) {
+        let open = true;
+        for (let x=startX; x <= endX; x++) {
+            if (this.board[x][y]) {
+                open = false;
+                break;
+            }
+        }
+        return open;
     }
 
     _isUnderAttack(x,y, attackingColor, boardOverride=null) {
@@ -243,6 +310,7 @@ class MoveBuilder {
                     .ofColor(piece.color)
                     .atPosition(otherX,otherY)
                     .onBoard(board)
+                    .havingMoved(piece.hasMoved)
                     .getAllowedMoves(false)
                     .some(([a,b]) => a === x && b === y);
             })

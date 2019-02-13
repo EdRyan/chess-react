@@ -1,6 +1,6 @@
 import {INITIALIZE_BOARD, PLAY_TURN, SELECT_PIECE, RESTART_GAME } from './types';
 
-const getPiece = (type, color) => { return {type, color}; }
+const getPiece = (type, color) => { return {type, color, hasMoved: false}; }
 
 const DEFAULT_CHESSBOARD = {
     a1: getPiece('rook','white'),
@@ -53,13 +53,12 @@ export const selectPiece = (squareName) => {
     };
 };
 
-export const playTurn = (srcSquareName, destSquareName, piece, swapPiece=null) => {
+export const playTurn = (srcSquareName, destSquareName, piece) => {
     return {
         type: PLAY_TURN,
         payload: {
             source: {
-                squareName: srcSquareName,
-                newPiece: swapPiece
+                squareName: srcSquareName
             },
             destination: {
                 squareName: destSquareName,
