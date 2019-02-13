@@ -5,6 +5,7 @@ import * as actions from '../actions';
 import { arrayIndicesToSquareName, squareNameToArrayIndices } from "../helpers";
 import Square from './Square';
 import './Chessboard.css';
+import { getAllowedMoves } from "../selectors/selectedPieceSelectors";
 
 class Chessboard extends React.Component {
 
@@ -26,7 +27,8 @@ class Chessboard extends React.Component {
         const [x,y] = squareNameToArrayIndices(squareName);
         const newlySelectedPiece = this.props.board[x][y];
 
-        const {squareName: currentSquare, allowedMoves} = this.props.selectedPiece;
+        const {squareName: currentSquare} = this.props.selectedPiece;
+        const {allowedMoves} = this.props;
 
         if (allowedMoves.includes(squareName)) {
             const [curX,curY] = squareNameToArrayIndices(currentSquare);
@@ -36,11 +38,11 @@ class Chessboard extends React.Component {
         }
 
         if (!this.isPieceSelectable(newlySelectedPiece) || squareName === currentSquare) {
-            this.props.selectPiece('', null, this.props.board);
+            this.props.selectPiece('');
             return;
         }
 
-        this.props.selectPiece(squareName, newlySelectedPiece, this.props.board);
+        this.props.selectPiece(squareName);
     };
 
     renderBoard() {
@@ -88,7 +90,8 @@ const mapStateToProps = state => {
         board: state.board,
         player: state.turn.player,
         turnNumber: state.turn.number,
-        selectedPiece: state.selectedPiece
+        selectedPiece: state.selectedPiece,
+        allowedMoves: getAllowedMoves(state.board, state.selectedPiece.squareName)
     };
 };
 

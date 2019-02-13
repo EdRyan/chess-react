@@ -1,6 +1,4 @@
 import {INITIALIZE_BOARD, PLAY_TURN, SELECT_PIECE, RESTART_GAME } from './types';
-import {squareNameToArrayIndices, arrayIndicesToSquareName} from "../helpers";
-import MoveBuilder from "../MoveBuilder";
 
 const getPiece = (type, color) => { return {type, color}; }
 
@@ -46,34 +44,11 @@ export const initializeChessboard = () => {
     }
 };
 
-export const selectPiece = (squareName, piece, board) => {
-
-    const [x,y] = squareNameToArrayIndices(squareName);
-
-    if (!piece) {
-        return {
-            type: SELECT_PIECE,
-            payload: {
-                squareName: squareName,
-                allowedMoves: []
-            }
-        };
-    }
-
-    const allowedMoves = new MoveBuilder()
-        .forPieceType(piece.type)
-        .ofColor(piece.color)
-        .atPosition(x,y)
-        .onBoard(board)
-        .getAllowedMoves();
-
-    const allowedMoveNames = allowedMoves.map(([a,b]) => arrayIndicesToSquareName([a,b]));
-
+export const selectPiece = (squareName) => {
     return {
         type: SELECT_PIECE,
         payload: {
-            squareName: squareName,
-            allowedMoves: allowedMoveNames
+            squareName: squareName
         }
     };
 };
