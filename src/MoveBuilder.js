@@ -28,22 +28,26 @@ class MoveBuilder {
         return this;
     }
 
-    getAllowedMoves(removeUnderAttackSquares=undefined) {
+    getAllowedMoves() {
 
         // TODO check required setup has been made
 
-        const remove = removeUnderAttackSquares === undefined ? (this.pieceType === 'king' ? true : false) : removeUnderAttackSquares;
+        return this._getAllowedMoves(0);
+    }
 
-        const moves = this._getAllowedMoves(remove);
+    _getAllowedMoves(level) {
+        this.recurrenceLevel = level;
 
-        if (remove) {
-            return this._removeUnderAttackSquares(moves);
+        const moves = this._getAllowedMovesForType();
+
+        if (level === 0) {
+            return this._removeKingUnderAttackSquares(moves);
         }
 
         return moves;
     }
 
-    _getAllowedMoves(removeUnderAttackSquares) {
+    _getAllowedMovesForType() {
 
         switch (this.pieceType) {
             case 'pawn':
@@ -68,6 +72,37 @@ class MoveBuilder {
         return moves.filter(([x, y]) => {
             const newBoard = this._getNewBoard(x,y);
             return !this._isUnderAttack(x, y, attackingColor, newBoard);
+        });
+    }
+
+    _removeKingUnderAttackSquares(moves) {
+        const attackingColor = this.color === 'white' ? 'black' : 'white';
+
+        let kingX = -1;
+        let kingY = -1;
+
+        if (this.pieceType !== 'king') {
+            for (let x = 0; x < 8; x++) {
+                for (let y = 0; y < 8; y++) {
+                    const piece = this.board[x][y];
+                    if (piece && piece.type === 'king' && piece.color === this.color) {
+                        kingX = x;
+                        kingY = y;
+                        break;
+                    }
+                }
+                if (kingX >= 0) {
+                    break;
+                }
+            }
+        }
+
+        return moves.filter(([x, y]) => {
+            const newBoard = this._getNewBoard(x,y);
+            const checkX = kingX >= 0 ? kingX : x;
+            const checkY = kingY >= 0 ? kingY : y;
+            const underAttack = this._isUnderAttack(checkX, checkY, attackingColor, newBoard);
+            return !underAttack;
         });
     }
 
@@ -311,7 +346,7 @@ class MoveBuilder {
                     .atPosition(otherX,otherY)
                     .onBoard(board)
                     .havingMoved(piece.hasMoved)
-                    .getAllowedMoves(false)
+                    ._getAllowedMoves(this.recurrenceLevel + 1)
                     .some(([a,b]) => a === x && b === y);
             })
         })
