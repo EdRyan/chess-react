@@ -1,38 +1,53 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { getCheckStatus } from "../selectors/playerSelectors";
-import './TurnHeader.css';
-
-library.add(faUser);
 
 class TurnHeader extends React.Component {
 
     renderCheck() {
+        if (this.props.checkStatus) {
+            return (
+                <div className="ui negative icon message" style={{borderColor:'#D11919',backgroundColor:'#F2DCDC',color:'#D11919'}}>
+                    <i className="icon exclamation triangle"></i>
+                    <div className="content" style={{textAlign:'left'}}>
+                        <h3 style={{textTransform:'capitalize'}}>{this.props.checkStatus}</h3>
+                    </div>
+                </div>
+            );
+        }
         return <>{this.props.checkStatus}</>;
     }
 
     render() {
         return (
-            <div className={`turn-header`}>
-                <div className="turn-header-main">
-                    <div className="turn">
-                        <h3>Turn</h3>
-                    </div>
-                    <div className="number">
-                        {this.props.number}
-                    </div>
-                    <div className="player">
-                        <h3>Player</h3>
-                    </div>
-                    <div className="icon">
-                        <FontAwesomeIcon icon={`user`} color={this.props.player} size="2x" />
-                        <p className={this.props.player}>{this.props.player}</p>
+            <div>
+                <div className="ui segment" style={{backgroundColor:'#8E8080'}}>
+                    <div className="ui two column stackable center aligned grid">
+                        <div className="middle aligned row">
+                            <div className="column">
+                                <div className="ui statistic">
+                                    <div className="value" style={{color:this.props.player}}>
+                                        {this.props.number}
+                                    </div>
+                                    <div className="label" style={{color:this.props.player}}>
+                                        Turn
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="column">
+                                <div className="ui statistic">
+                                    <div className="value" style={{color:this.props.player}}>
+                                        <i className="user icon"></i>
+                                    </div>
+                                    <div className="label" style={{color:this.props.player}}>
+                                        {this.props.player}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className={`check-indicator  ${this.props.checkStatus ? 'in-check' : 'not-in-check'}`}>
+                <div style={{margin:'10px auto', height:'80px', width:'400px'}}>
                     {this.renderCheck()}
                 </div>
             </div>

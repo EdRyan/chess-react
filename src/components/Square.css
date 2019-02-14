@@ -12,18 +12,18 @@ div.square.selectable {
 }
 
 div.square.black {
-    background-color: gray;
+    background-color: #8E8080;
 }
 
 div.square.selected path {
-    stroke: #3a3;
+    stroke: #C49191;
     stroke-width: 20;
 }
 
 div.square.allowed {
-    background-color: #9f9;
+    background-color: #F2DCDC;
 }
 
 div.square.allowed.black {
-    background-color: #3a3;
+    background-color: #C49191;
 }

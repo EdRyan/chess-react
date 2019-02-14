@@ -1,4 +1,4 @@
 div.chessboard {
     display: inline-block;
-    border: 1px solid gray;
+    width: 400px;
 }

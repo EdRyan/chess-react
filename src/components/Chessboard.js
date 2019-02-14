@@ -79,7 +79,9 @@ class Chessboard extends React.Component {
     render() {
         return (
             <div className="chessboard">
-                {this.renderBoard()}
+                <div className="ui fluid card">
+                    {this.renderBoard()}
+                </div>
             </div>
         );
     }

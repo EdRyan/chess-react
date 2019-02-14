@@ -10,8 +10,8 @@ class App extends React.Component {
     renderRestartButton() {
         if (this.props.canRestart) {
             return (
-                <div>
-                    <button onClick={this.props.onRestartClick}>Restart Game</button>
+                <div style={{marginTop:'30px'}}>
+                    <button className="ui button" onClick={this.props.onRestartClick}>Restart Game</button>
                 </div>
             );
         };
@@ -19,7 +19,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div className="app">
+            <div className="app ui container center aligned">
                 <TurnHeader/>
                 <Chessboard/>
                 {this.renderRestartButton()}
