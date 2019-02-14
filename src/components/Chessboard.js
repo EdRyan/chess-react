@@ -33,7 +33,12 @@ class Chessboard extends React.Component {
         if (allowedMoves.includes(squareName)) {
             const [curX,curY] = squareNameToArrayIndices(currentSquare);
             const currentPiece = this.props.board[curX][curY];
-            this.props.playTurn(currentSquare, squareName, currentPiece);
+
+            if (currentPiece.type === 'pawn' && (y === 0 || y === 7)) {
+                this.props.showPawnPromotionModal(currentSquare, squareName, currentPiece);
+            } else {
+                this.props.playTurn(currentSquare, squareName, currentPiece);
+            }
             return;
         }
 

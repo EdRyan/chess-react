@@ -1,4 +1,11 @@
-import {INITIALIZE_BOARD, PLAY_TURN, SELECT_PIECE, RESTART_GAME } from './types';
+import {
+    INITIALIZE_BOARD,
+    PLAY_TURN,
+    SELECT_PIECE,
+    RESTART_GAME,
+    SHOW_PAWN_PROMOTION_MODAL,
+    CANCEL_PAWN_PROMOTION_MODAL
+} from './types';
 
 const getPiece = (type, color) => { return {type, color, hasMoved: false}; }
 
@@ -65,6 +72,27 @@ export const playTurn = (srcSquareName, destSquareName, piece) => {
                 newPiece: piece
             }
         }
+    };
+};
+
+export const showPawnPromotionModal = (srcSquareName, destSquareName, piece) => {
+    return {
+        type: SHOW_PAWN_PROMOTION_MODAL,
+        payload: {
+            source: {
+                squareName: srcSquareName
+            },
+            destination: {
+                squareName: destSquareName,
+                newPiece: piece
+            }
+        }
+    };
+};
+
+export const cancelPawnPromotionModal = () => {
+    return {
+        type: CANCEL_PAWN_PROMOTION_MODAL
     };
 };
 

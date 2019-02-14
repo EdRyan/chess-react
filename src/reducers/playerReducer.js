@@ -1,9 +1,16 @@
-import { SELECT_PIECE, PLAY_TURN, RESTART_GAME } from '../actions/types';
+import {
+    SELECT_PIECE,
+    PLAY_TURN,
+    RESTART_GAME,
+    SHOW_PAWN_PROMOTION_MODAL,
+    CANCEL_PAWN_PROMOTION_MODAL
+} from '../actions/types';
 import {squareNameToArrayIndices} from "../helpers";
 
 const INITIAL_STATE = {
     selectedSquareName: '',
-    enPassantSquareName: ''
+    enPassantSquareName: '',
+    showPawnPromotionModal : null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -27,7 +34,18 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 selectedSquareName: '',
-                enPassantSquareName: enPassantSquareName
+                enPassantSquareName: enPassantSquareName,
+                showPawnPromotionModal: null
+            };
+        case SHOW_PAWN_PROMOTION_MODAL:
+            return {
+                ...state,
+                showPawnPromotionModal: {...action.payload}
+            };
+        case CANCEL_PAWN_PROMOTION_MODAL:
+            return {
+                ...state,
+                showPawnPromotionModal: null
             };
         case RESTART_GAME:
             return {...INITIAL_STATE};
