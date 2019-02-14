@@ -1,13 +1,13 @@
 import MoveBuilder from "../MoveBuilder";
 import {arrayIndicesToSquareName, squareNameToArrayIndices} from "../helpers";
 
-export const getAllowedMoves = (board, currentSquareName) => {
+export const getAllowedMoves = (board, squareName) => {
 
-    if (!currentSquareName) {
+    if (!squareName) {
         return [];
     }
 
-    const [x,y] = squareNameToArrayIndices(currentSquareName);
+    const [x,y] = squareNameToArrayIndices(squareName);
     const piece = board[x][y];
 
     if (!piece) {

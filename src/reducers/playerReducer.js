@@ -1,7 +1,7 @@
 import { SELECT_PIECE, PLAY_TURN, RESTART_GAME } from '../actions/types';
 
 const INITIAL_STATE = {
-    squareName: ''
+    selectedSquareName: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -9,12 +9,12 @@ export default (state = INITIAL_STATE, action) => {
         case SELECT_PIECE:
             return {
                 ...state,
-                squareName: action.payload.squareName
+                selectedSquareName: action.payload.squareName
             };
         case PLAY_TURN:
             return {
                 ...state,
-                squareName: ''
+                selectedSquareName: ''
             };
         case RESTART_GAME:
             return {...INITIAL_STATE};

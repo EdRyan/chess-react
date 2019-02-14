@@ -5,7 +5,7 @@ import * as actions from '../actions';
 import { arrayIndicesToSquareName, squareNameToArrayIndices } from "../helpers";
 import Square from './Square';
 import './Chessboard.css';
-import { getAllowedMoves } from "../selectors/selectedPieceSelectors";
+import { getAllowedMoves } from "../selectors/playerSelectors";
 
 class Chessboard extends React.Component {
 
@@ -27,7 +27,7 @@ class Chessboard extends React.Component {
         const [x,y] = squareNameToArrayIndices(squareName);
         const newlySelectedPiece = this.props.board[x][y];
 
-        const {squareName: currentSquare} = this.props.selectedPiece;
+        const currentSquare = this.props.selectedSquareName;
         const {allowedMoves} = this.props;
 
         if (allowedMoves.includes(squareName)) {
@@ -90,8 +90,8 @@ const mapStateToProps = state => {
         board: state.board,
         player: state.turn.player,
         turnNumber: state.turn.number,
-        selectedPiece: state.selectedPiece,
-        allowedMoves: getAllowedMoves(state.board, state.selectedPiece.squareName)
+        selectedSquareName: state.player.selectedSquareName,
+        allowedMoves: getAllowedMoves(state.board, state.player.selectedSquareName)
     };
 };
 

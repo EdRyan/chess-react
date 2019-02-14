@@ -4,7 +4,7 @@ import * as actions from "../actions";
 import {squareNameToArrayIndices} from "../helpers";
 import Piece from './Piece';
 import './Square.css';
-import {getAllowedMoves} from "../selectors/selectedPieceSelectors";
+import {getAllowedMoves} from "../selectors/playerSelectors";
 
 class Square extends React.Component {
 
@@ -36,8 +36,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         piece: piece,
         selectable:  piece && (piece.color === state.turn.player),
-        selected: ownProps.name === state.selectedPiece.squareName,
-        allowedMove: getAllowedMoves(state.board,state.selectedPiece.squareName).includes(ownProps.name)
+        selected: ownProps.name === state.player.selectedSquareName,
+        allowedMove: getAllowedMoves(state.board,state.player.selectedSquareName).includes(ownProps.name)
     };
 };
 
