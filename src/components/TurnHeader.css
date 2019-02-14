@@ -1,14 +1,17 @@
-div.turn-header {
+div.turn-header.nocheck {
+    margin-bottom: 10px;
+}
+
+div.turn-header-main {
     width: 400px;
     height: 60px;
     border: 1px solid gray;
-    margin-bottom: 10px;
     text-transform: uppercase;
     display: flex;
     text-align: center;
 }
 
-div.turn-header div.turn {
+div.turn-header-main div.turn {
     float: left;
     width: 125px;
     justify-content: center;
@@ -16,7 +19,7 @@ div.turn-header div.turn {
     display: flex;
 }
 
-div.turn-header div.number {
+div.turn-header-main div.number {
     float: left;
     width: 75px;
     font-size: 3em;
@@ -24,7 +27,7 @@ div.turn-header div.number {
     font-weight: bold;
 }
 
-div.turn-header div.player {
+div.turn-header-main div.player {
     float: left;
     width:125px;
     justify-content: center;
@@ -32,12 +35,12 @@ div.turn-header div.player {
     display: flex;
 }
 
-div.turn-header div.name {
+div.turn-header-main div.name {
     float: left;
     width: 75px;
 }
 
-div.turn-header div.icon {
+div.turn-header-main div.icon {
     width: 75px;
     background-color: gray;
     height: 100%;
@@ -46,20 +49,35 @@ div.turn-header div.icon {
 }
 
 
-div.turn-header div.icon svg {
+div.turn-header-main div.icon svg {
     margin-top: 6px;
 }
 
-div.turn-header div.icon p {
+div.turn-header-main div.icon p {
     font-size: 12px;
     font-weight: bold;
     margin: 2px auto 0 auto;
 }
 
-div.turn-header div.icon p.white {
+div.turn-header-main div.icon p.white {
     color: white;
 }
 
-div.turn-header h3 {
+div.turn-header-main h3 {
     margin: 0;
+}
+
+div.turn-header div.check-indicator {
+    width: 400px;
+    height: 30px;
+    border: 1px solid white;
+}
+
+div.turn-header div.check-indicator.in-check {
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }

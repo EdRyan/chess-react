@@ -24,3 +24,14 @@ export const getAllowedMoves = (board, squareName) => {
 
     return allowedMoves.map(([a,b]) => arrayIndicesToSquareName([a,b]));
 };
+
+export const isInCheck = (board, color) => {
+
+    const moveBuilder = new MoveBuilder().onBoard(board);
+
+    const [kingX, kingY] = moveBuilder.findKing(board, color);
+
+    const attackingColor = color === 'white' ? 'black' : 'white';
+
+    return moveBuilder.isUnderAttack(kingX, kingY, attackingColor);
+};

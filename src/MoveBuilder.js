@@ -71,7 +71,7 @@ class MoveBuilder {
         const attackingColor = this.color === 'white' ? 'black' : 'white';
         return moves.filter(([x, y]) => {
             const newBoard = this._getNewBoard(x,y);
-            return !this._isUnderAttack(x, y, attackingColor, newBoard);
+            return !this.isUnderAttack(x, y, attackingColor, newBoard);
         });
     }
 
@@ -82,28 +82,37 @@ class MoveBuilder {
         let kingY = -1;
 
         if (this.pieceType !== 'king') {
-            for (let x = 0; x < 8; x++) {
-                for (let y = 0; y < 8; y++) {
-                    const piece = this.board[x][y];
-                    if (piece && piece.type === 'king' && piece.color === this.color) {
-                        kingX = x;
-                        kingY = y;
-                        break;
-                    }
-                }
-                if (kingX >= 0) {
-                    break;
-                }
-            }
+            [kingX, kingY] = this.findKing(this.board, this.color);
         }
 
         return moves.filter(([x, y]) => {
             const newBoard = this._getNewBoard(x,y);
             const checkX = kingX >= 0 ? kingX : x;
             const checkY = kingY >= 0 ? kingY : y;
-            const underAttack = this._isUnderAttack(checkX, checkY, attackingColor, newBoard);
+            const underAttack = this.isUnderAttack(checkX, checkY, attackingColor, newBoard);
             return !underAttack;
         });
+    }
+
+    findKing(board, color) {
+        let kingX = -1;
+        let kingY = -1;
+
+        for (let x = 0; x < 8; x++) {
+            for (let y = 0; y < 8; y++) {
+                const piece = board[x][y];
+                if (piece && piece.type === 'king' && piece.color === color) {
+                    kingX = x;
+                    kingY = y;
+                    break;
+                }
+            }
+            if (kingX >= 0) {
+                break;
+            }
+        }
+
+        return [kingX, kingY];
     }
 
     _getAllowedPawnMoves() {
@@ -272,7 +281,7 @@ class MoveBuilder {
                     let underAttack = false;
                     for (let i=0; i <= 2; i++) {
                         const newBoard = this._getNewBoard(this.x-i,this.y);
-                        underAttack = underAttack || this._isUnderAttack(this.x-i,this.y,attackingPlayer,newBoard);
+                        underAttack = underAttack || this.isUnderAttack(this.x-i,this.y,attackingPlayer,newBoard);
                         if (underAttack) {
                             break;
                         }
@@ -292,7 +301,7 @@ class MoveBuilder {
                     let underAttack = false;
                     for (let i=0; i <= 2; i++) {
                         const newBoard = this._getNewBoard(this.x+i,this.y);
-                        underAttack = underAttack || this._isUnderAttack(this.x+i,this.y,attackingPlayer,newBoard);
+                        underAttack = underAttack || this.isUnderAttack(this.x+i,this.y,attackingPlayer,newBoard);
                         if (underAttack) {
                             break;
                         }
@@ -327,7 +336,7 @@ class MoveBuilder {
         return open;
     }
 
-    _isUnderAttack(x,y, attackingColor, boardOverride=null) {
+    isUnderAttack(x, y, attackingColor, boardOverride=null) {
 
         const board = boardOverride || this.board;
 
