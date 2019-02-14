@@ -1,7 +1,7 @@
 import MoveBuilder from "../MoveBuilder";
 import {arrayIndicesToSquareName, squareNameToArrayIndices} from "../helpers";
 
-export const getAllowedMoves = (board, squareName) => {
+export const getAllowedMoves = (board, squareName, enPassantSquareName) => {
 
     if (!squareName) {
         return [];
@@ -20,12 +20,13 @@ export const getAllowedMoves = (board, squareName) => {
         .atPosition(x,y)
         .onBoard(board)
         .havingMoved(piece.hasMoved)
+        .withPossibleEnPassantAt(enPassantSquareName)
         .getAllowedMoves();
 
     return allowedMoves.map(([a,b]) => arrayIndicesToSquareName([a,b]));
 };
 
-export const getCheckStatus = (board, color) => {
+export const getCheckStatus = (board, color, enPassantSquareName) => {
 
     const moveBuilder = new MoveBuilder().onBoard(board);
 
@@ -49,6 +50,7 @@ export const getCheckStatus = (board, color) => {
                 .atPosition(x,y)
                 .onBoard(board)
                 .havingMoved(piece.hasMoved)
+                .withPossibleEnPassantAt(enPassantSquareName)
                 .getAllowedMoves()
                 .length > 0;
         })

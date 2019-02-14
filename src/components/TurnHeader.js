@@ -44,7 +44,7 @@ const mapStateToProps = state => {
     return {
         number: state.turn.number,
         player: state.turn.player,
-        checkStatus: getCheckStatus(state.board, state.turn.player)
+        checkStatus: getCheckStatus(state.board, state.turn.player, state.player.enPassantSquareName)
     };
 };
 

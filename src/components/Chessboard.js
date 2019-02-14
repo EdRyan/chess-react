@@ -91,7 +91,7 @@ const mapStateToProps = state => {
         player: state.turn.player,
         turnNumber: state.turn.number,
         selectedSquareName: state.player.selectedSquareName,
-        allowedMoves: getAllowedMoves(state.board, state.player.selectedSquareName)
+        allowedMoves: getAllowedMoves(state.board, state.player.selectedSquareName, state.player.enPassantSquareName)
     };
 };
 

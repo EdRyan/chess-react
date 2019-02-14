@@ -45,12 +45,18 @@ export default (state = INITIAL_STATE, action) => {
                 const newRookX = destX === 0 ? 3 : 5;
 
                 // set new king position
-                newBoardState[newKingX][destY] = {...action.payload.destination.newPiece, hasMoved: true};
+                newBoardState[newKingX][destY] = {...piece, hasMoved: true};
                 // set new rook position
                 newBoardState[newRookX][destY] = {...state[destX][destY], hasMoved: true}
                 newBoardState[destX][destY] = null;
+            } else if (piece.type === 'pawn' && destX-srcX !== 0 && !state[destX][destY]) {
+                // en passant (pawn moving diagonally into an empty space)
+                newBoardState[destX][destY] = {...piece, hasMoved: true};
+                // clear out old pawn square
+                const oldPawnY = piece.color === 'white' ? 4 : 3; // can only happen on one row
+                newBoardState[destX][oldPawnY] = null;
             } else {
-                newBoardState[destX][destY] = {...action.payload.destination.newPiece, hasMoved: true};
+                newBoardState[destX][destY] = {...piece, hasMoved: true};
             }
 
             return newBoardState;

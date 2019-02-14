@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {squareNameToArrayIndices} from "./helpers";
 
 class MoveBuilder {
 
@@ -25,6 +26,11 @@ class MoveBuilder {
 
     havingMoved(hasMoved) {
         this.hasMoved = hasMoved;
+        return this;
+    }
+
+    withPossibleEnPassantAt(squareName) {
+        this.enPassantSquareName = squareName;
         return this;
     }
 
@@ -139,6 +145,19 @@ class MoveBuilder {
             );
 
         moves.push(...newTakes);
+
+        // en passant
+        if (this.enPassantSquareName) {
+            const [epX, epY] = squareNameToArrayIndices(this.enPassantSquareName)
+            const rivalPawn = this.board[epX][epY];
+            if (rivalPawn.type === 'pawn' && rivalPawn.color !== this.color) {
+                // sanity check
+                if (epY === this.y && (epX === this.x-1 || epX === this.x+1)) {
+                    const deltaY = this.color === 'white' ? 1 : -1;
+                    moves.push([epX,epY + deltaY]);
+                }
+            }
+        }
 
         return moves;
     };
@@ -349,6 +368,8 @@ class MoveBuilder {
                     return false;
                 }
 
+                // TODO determine if we need withPossibleEnPassantAt here
+                // I think it should not be necessary because it only affects pawns
                 return new MoveBuilder()
                     .forPieceType(piece.type)
                     .ofColor(piece.color)

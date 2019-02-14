@@ -37,7 +37,7 @@ const mapStateToProps = (state, ownProps) => {
         piece: piece,
         selectable:  piece && (piece.color === state.turn.player),
         selected: ownProps.name === state.player.selectedSquareName,
-        allowedMove: getAllowedMoves(state.board,state.player.selectedSquareName).includes(ownProps.name)
+        allowedMove: getAllowedMoves(state.board,state.player.selectedSquareName,state.player.enPassantSquareName).includes(ownProps.name)
     };
 };
 
