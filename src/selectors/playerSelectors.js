@@ -25,7 +25,7 @@ export const getAllowedMoves = (board, squareName) => {
     return allowedMoves.map(([a,b]) => arrayIndicesToSquareName([a,b]));
 };
 
-export const isInCheck = (board, color) => {
+export const getCheckStatus = (board, color) => {
 
     const moveBuilder = new MoveBuilder().onBoard(board);
 
@@ -33,5 +33,30 @@ export const isInCheck = (board, color) => {
 
     const attackingColor = color === 'white' ? 'black' : 'white';
 
-    return moveBuilder.isUnderAttack(kingX, kingY, attackingColor);
+    const isInCheck = moveBuilder.isUnderAttack(kingX, kingY, attackingColor);
+
+    const movesAvailable = [...Array(8).keys()].some(x => {
+        return [...Array(8).keys()].some(y => {
+            const piece = board[x][y];
+
+            if (!piece || piece.color !== color) {
+                return false;
+            }
+
+            return new MoveBuilder()
+                .forPieceType(piece.type)
+                .ofColor(piece.color)
+                .atPosition(x,y)
+                .onBoard(board)
+                .havingMoved(piece.hasMoved)
+                .getAllowedMoves()
+                .length > 0;
+        })
+    });
+
+    if (movesAvailable) {
+        return isInCheck ? 'check' : false;
+    } else {
+        return isInCheck ? 'checkmate' : 'stalemate';
+    }
 };
