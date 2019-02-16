@@ -1,5 +1,8 @@
-import MoveBuilder from "../MoveBuilder";
 import {arrayIndicesToSquareName, squareNameToArrayIndices} from "../helpers";
+import PieceMoveGeneratorBuilder from "../services/PieceMoveGeneratorBuilder";
+import Scenario from "../services/Scenario";
+import {InCheckScenarioEvaluator} from "../services/InCheckScenarioEvaluator";
+import {PlayerMoveGenerator} from "../services/PlayerMoveGenerator";
 
 export const getAllowedMoves = (board, squareName, enPassantSquareName) => {
 
@@ -14,49 +17,26 @@ export const getAllowedMoves = (board, squareName, enPassantSquareName) => {
         return [];
     }
 
-    const allowedMoves = new MoveBuilder()
-        .forPieceType(piece.type)
-        .ofColor(piece.color)
+    const allowedMoves = new PieceMoveGeneratorBuilder()
+        .forPiece(piece)
         .atPosition(x,y)
         .onBoard(board)
-        .havingMoved(piece.hasMoved)
         .withPossibleEnPassantAt(enPassantSquareName)
-        .getAllowedMoves();
+        .build()
+        .getLegalMoves();
 
     return allowedMoves.map(([a,b]) => arrayIndicesToSquareName([a,b]));
 };
 
 export const getCheckStatus = (board, color, enPassantSquareName) => {
+    const scenario = new Scenario(board, enPassantSquareName);
+    const checkEvaluator = new InCheckScenarioEvaluator(scenario);
+    const isInCheck = checkEvaluator.isInCheck(color);
 
-    const moveBuilder = new MoveBuilder().onBoard(board);
+    const pmGenerator = new PlayerMoveGenerator(scenario);
+    const hasMoves = pmGenerator.hasAnyMoves(color);
 
-    const [kingX, kingY] = moveBuilder.findKing(board, color);
-
-    const attackingColor = color === 'white' ? 'black' : 'white';
-
-    const isInCheck = moveBuilder.isUnderAttack(kingX, kingY, attackingColor);
-
-    const movesAvailable = [...Array(8).keys()].some(x => {
-        return [...Array(8).keys()].some(y => {
-            const piece = board[x][y];
-
-            if (!piece || piece.color !== color) {
-                return false;
-            }
-
-            return new MoveBuilder()
-                .forPieceType(piece.type)
-                .ofColor(piece.color)
-                .atPosition(x,y)
-                .onBoard(board)
-                .havingMoved(piece.hasMoved)
-                .withPossibleEnPassantAt(enPassantSquareName)
-                .getAllowedMoves()
-                .length > 0;
-        })
-    });
-
-    if (movesAvailable) {
+    if (hasMoves) {
         return isInCheck ? 'check' : false;
     } else {
         return isInCheck ? 'checkmate' : 'stalemate';
