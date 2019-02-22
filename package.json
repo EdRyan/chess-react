@@ -1,6 +1,7 @@
 {
   "name": "chess-react",
   "version": "1.0.0",
+  "homepage": ".",
   "license": "MIT",
   "private": true,
   "dependencies": {
