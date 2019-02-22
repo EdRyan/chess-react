@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { INITIALIZE_BOARD, PLAY_TURN, RESTART_GAME } from '../actions/types';
 import {squareNameToArrayIndices} from "../helpers";
 
@@ -23,7 +24,7 @@ export default (state = INITIAL_STATE, action) => {
             });
             return newState;
         case RESTART_GAME:
-            const newInitialState = [...INITIAL_STATE];
+            const newInitialState = _.cloneDeep(INITIAL_STATE);
             Object.keys(action.payload).map(square => {
                 const [x,y] = squareNameToArrayIndices(square);
                 newInitialState[x][y] = action.payload[square];
