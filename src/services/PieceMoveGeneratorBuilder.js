@@ -246,6 +246,13 @@ export default class PieceMoveGeneratorBuilder {
         return this;
     }
 
+    atSquareName(squareName) {
+        const [x,y] = squareNameToArrayIndices(squareName);
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+
     onBoard(board) {
         this.board = board;
         return this;
