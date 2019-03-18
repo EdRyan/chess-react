@@ -181,6 +181,240 @@ describe('Initial chessboard', () => {
 
 });
 
+// https://lichess.org/editor/rnbqk1nr/1p1pp3/2p2p1b/pP6/6pp/B1N1PQPN/P1PP1PBP/R3K2R_w_KQkq_-
+describe('Custom board 1', () => {
+
+    const buildScenario = (enPassant=undefined) => {
+        const s = new TestScenario(enPassant);
+        s.__setPiece('a8','rook','black',false);
+        s.__setPiece('b8','knight','black',false);
+        s.__setPiece('c8','bishop','black',false);
+        s.__setPiece('d8','queen','black',false);
+        s.__setPiece('e8','king','black',false);
+        s.__setPiece('g8','knight','black',false);
+        s.__setPiece('h8','rook','black',false);
+        s.__setPiece('a5','pawn','black',true);
+        s.__setPiece('b7','pawn','black',false);
+        s.__setPiece('c6','pawn','black',true);
+        s.__setPiece('d7','pawn','black',false);
+        s.__setPiece('e7','pawn','black',false);
+        s.__setPiece('f6','pawn','black',true);
+        s.__setPiece('g4','pawn','black',true);
+        s.__setPiece('h4','pawn','black',true);
+        s.__setPiece('h6','bishop','black',true);
+        s.__setPiece('a1','rook','white',false);
+        s.__setPiece('e1','king','white',false);
+        s.__setPiece('h1','rook','white',false);
+        s.__setPiece('a2','pawn','white',false);
+        s.__setPiece('c2','pawn','white',false);
+        s.__setPiece('d2','pawn','white',false);
+        s.__setPiece('f2','pawn','white',false);
+        s.__setPiece('h2','pawn','white',false);
+        s.__setPiece('g2','bishop','white',true);
+        s.__setPiece('a3','bishop','white',true);
+        s.__setPiece('c3','knight','white',true);
+        s.__setPiece('e3','pawn','white',true);
+        s.__setPiece('f3','queen','white',true);
+        s.__setPiece('g3','pawn','white',true);
+        s.__setPiece('h3','knight','white',true);
+        s.__setPiece('b5','pawn','white',true);
+        return s;
+    };
+
+    it('Should calculate a8 rook moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'a8');
+        checkMoves(moves, ['a7','a6']);
+    });
+
+    it('Should calculate b8 knight moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'b8');
+        checkMoves(moves, ['a6']);
+    });
+
+    it('Should calculate c8 bishop moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'c8');
+        checkMoves(moves, []);
+    });
+
+    it('Should calculate d8 queen moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'d8');
+        checkMoves(moves, ['c7','b6']);
+    });
+
+    it('Should calculate e8 king moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'e8');
+        checkMoves(moves, ['f7','f8']);
+    });
+
+    it('Should calculate g8 knight moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'g8');
+        checkMoves(moves, []);
+    });
+
+    it('Should calculate h8 rook moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'h8');
+        checkMoves(moves, ['h7']);
+    });
+
+    it('Should calculate b7 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'b7');
+        checkMoves(moves, ['b6']);
+    });
+
+    it('Should calculate d7 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'d7');
+        checkMoves(moves, ['d6','d5']);
+    });
+
+    it('Should calculate e7 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'e7');
+        checkMoves(moves, ['e6','e5']);
+    });
+
+    it('Should calculate c6 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'c6');
+        checkMoves(moves, ['b5','c5']);
+    });
+
+    it('Should calculate f6 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'f6');
+        checkMoves(moves, ['f5']);
+    });
+
+    it('Should calculate h6 bishop moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'h6');
+        checkMoves(moves, ['g5','f4','e3','g7','f8']);
+    });
+
+    it('Should calculate a5 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'a5');
+        checkMoves(moves, ['a4']);
+    });
+
+    it('Should calculate b5 pawn moves', () => {
+        const s = buildScenario('a5');
+        const moves = getMoves(s,'b5');
+        checkMoves(moves, ['a6','b6','c6']);
+    });
+
+    it('Should calculate g4 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'g4');
+        checkMoves(moves, ['f3','h3']);
+    });
+
+    it('Should calculate h4 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'h4');
+        checkMoves(moves, ['g3']);
+    });
+
+    it('Should calculate a3 bishop moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'a3');
+        checkMoves(moves, ['b2','c1','b4','c5','d6','e7']);
+    });
+
+    it('Should calculate c3 knight moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'c3');
+        checkMoves(moves, ['d5','a4','e4','e2','b1','d1']);
+    });
+
+    it('Should calculate e3 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'e3');
+        checkMoves(moves, ['e4']);
+    });
+
+    it('Should calculate f3 queen moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'f3');
+        checkMoves(moves, ['c6','d5','e4','g4','e2','d1','f4','f5','f6']);
+    });
+
+    it('Should calculate g3 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'g3');
+        checkMoves(moves, ['h4']);
+    });
+
+    it('Should calculate h3 knight moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'h3');
+        checkMoves(moves, ['g5','f4','g1']);
+    });
+
+    it('Should calculate a2 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'a2');
+        checkMoves(moves, []);
+    });
+
+    it('Should calculate c2 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'c2');
+        checkMoves(moves, []);
+    });
+
+    it('Should calculate d2 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'d2');
+        checkMoves(moves, ['d3','d4']);
+    });
+
+    it('Should calculate f2 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'f2');
+        checkMoves(moves, []);
+    });
+
+    it('Should calculate g2 bishop moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'g2');
+        checkMoves(moves, ['f1']);
+    });
+
+    it('Should calculate h2 pawn moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'h2');
+        checkMoves(moves, []);
+    });
+
+    it('Should calculate a1 rook moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'a1');
+        checkMoves(moves, ['b1','c1','d1']);
+    });
+
+    it('Should calculate e1 king moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'e1');
+        checkMoves(moves, ['d1','e2','f1','a1','h1']);
+    });
+
+    it('Should calculate h1 rook moves', () => {
+        const s = buildScenario();
+        const moves = getMoves(s,'h1');
+        checkMoves(moves, ['f1','g1']);
+    });
+
+});
+
 // http://www.thechesswebsite.com/bestmove3/
 describe('Board as of The Chess Website #3', () => {
 
